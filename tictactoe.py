@@ -39,7 +39,6 @@ def int_input(state, mover):
             print("Hmm. try again...")
 
 
-
 class TicTacToe():
     """A Class representing the game of TicTacToe."""
     Column = 0
@@ -103,7 +102,7 @@ class TicTacToe():
             self.turn = 1  # if the board is empty, it's X's turn
 
     def move(self, where):
-        """_ Part 1: Implement This Method _
+        """
 
         Make the current player's move at the specified location/index and
         change turns to the next player; where is an index into the board in
@@ -114,14 +113,38 @@ class TicTacToe():
 
         Return False if the specified index is unopen, or does not exist"""
 
-        pass
+        if where in range(len(self.board)) and self.board[where] == 0:
+            self.board[where] = self.turn
+            self.turn = 1 if self.turn == -1 else -1
+            return True
+        return False
 
     def show(self, stream=sys.stdout):
         """_ Part 2: Implement This Method _
 
         Displays the board on the specified stream."""
-
-        pass
+        print('\n')
+        i = 0
+        j = self.n
+        for x in range(self.n):
+            row = self.board[i:j]
+            row_len = self.n
+            # Printing X's and O's
+            for y in range(row_len):
+                stream.write(f' {self.Chrs[row[y]]} ')
+                if y < (row_len - 1):
+                    stream.write('|')
+            stream.write('\n')
+            # Printing row dividers
+            if x < (self.n - 1):   # If not printing the last row
+                for y in range(row_len):
+                    stream.write('---')
+                    if y < (row_len - 1):  # Compensating for column divider
+                        stream.write('-')
+                stream.write('\n')
+            i += self.n
+            j += self.n
+        print('\n')
 
     def is_win(self):
         """_ Part 3: Implement This Method _
@@ -140,8 +163,46 @@ class TicTacToe():
          (TicTacToe.StaleMate, 0, 0): if the game is a stalemate
          False: if the end state is not yet determined
         """
-        # column win
-        pass
+
+        # Checking horizontal win
+        i = 0           # Beginning slice index
+        j = self.n      # Trailing slice index
+        made_last_move = 1 if self.turn == -1 else -1
+        for x in range(self.n):
+            row = self.board[i:j]
+            if sum(row) == (made_last_move * self.n):
+                return TicTacToe.Row, x, made_last_move
+            i += self.n
+            j += self.n
+
+        # Checking vertical win
+        i = 0
+        for x in range(self.n):
+            column = self.board[0::self.n]
+            if sum(column) == (made_last_move * self.n):
+                return TicTacToe.Column, x, made_last_move
+
+        # Checking first diagonal win
+        diagonal = []
+        for x in range(self.n):
+            next_square_index = (self.n * x) + x
+            diagonal.append(self.board[next_square_index])
+        if sum(diagonal) == (made_last_move * self.n):
+            return TicTacToe.Diagonal, 0, made_last_move
+        # Checking second diagonal
+        diagonal = []
+        for x in range(self.n):
+            complement = self.n - x
+            next_square_index = (self.n * x) + complement - 1  # -1 adjusts for 0 indexing
+            diagonal.append(self.board[next_square_index])
+        if sum(diagonal) == (made_last_move * self.n):
+            return TicTacToe.Diagonal, 1, made_last_move
+
+        # Checking for stalemate
+        if 0 not in self.board:
+            return TicTacToe.StaleMate, 0, 0
+
+        return False
 
     def describe_win(self, win):
         """Provides a text representation of an end-game state."""
@@ -185,7 +246,27 @@ class TicTacToe():
         the movefn should take two arguments:
           (1) the game state; and (2) the current player
         """
-        pass
+        while True:
+            # Showing board state
+            if outstream:
+                self.show(outstream)
+            else:
+                self.show()
+            # Checking for end state
+            end_state_details = self.is_win()
+            if end_state_details:
+                print('Game Over!')
+                if showwin:
+                    win_description = self.describe_win(end_state_details)
+                    if outstream:
+                        outstream.write(win_description)
+                    else:
+                        print(win_description)
+                break
+
+            # Processsing next move
+            next_move = movefn(self.board, self.turn)
+            self.move(next_move)
 
     def get_state(self):
         """Get the state of the board as an immutable tuple"""
