@@ -177,9 +177,8 @@ class TicTacToe():
             j += self.n
 
         # Checking vertical win
-        i = 0
         for x in range(self.n):
-            column = self.board[0::self.n]
+            column = self.board[x::self.n]
             if sum(column) == (made_last_move * self.n):
                 return TicTacToe.Column, x, made_last_move
 
@@ -316,7 +315,7 @@ def mc(state, n, debug=False):
                 for square in range(len(board_state)):
                     if board_state[square] == 0:
                         available_moves.append(square)
-
+                random.shuffle(available_moves)
                 next_move = random.choice(available_moves)
                 gameboard.move(next_move)
 
