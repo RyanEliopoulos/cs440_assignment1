@@ -28,6 +28,7 @@ Answer the following questions using your implementation:
 
 """
 import sys
+import random
 
 
 def int_input(state, mover):
@@ -255,13 +256,12 @@ class TicTacToe():
             # Checking for end state
             end_state_details = self.is_win()
             if end_state_details:
-                print('Game Over!')
+                if outstream:
+                    outstream.write('Game Over!')
                 if showwin:
                     win_description = self.describe_win(end_state_details)
                     if outstream:
                         outstream.write(win_description)
-                    else:
-                        print(win_description)
                 break
 
             # Processsing next move
@@ -287,7 +287,44 @@ def mc(state, n, debug=False):
 
     """
 
-    pass
+    # Prepping simulation
+    player_1_wins = 0
+    player_2_wins = 0
+    stalemates = 0
+    gameboard = TicTacToe(3)
+    translated_state = [x if x != 2 else -1 for x in state]
+    gameboard.reset(translated_state)
+
+    # Simulating
+    for x in range(n):
+        # Check if game is over
+        while True:
+            board_state = gameboard.get_state()
+            conclusion_details = gameboard.is_win()
+            if conclusion_details:  # Game is over
+                if conclusion_details[2] == 1:
+                    player_1_wins += 1
+                elif conclusion_details[2] == -1:
+                    player_2_wins += 1
+                else:
+                    stalemates += 1
+                gameboard.reset(translated_state)
+                break
+            else:  # Game continues
+                # Determining next move
+                available_moves = []
+                for square in range(len(board_state)):
+                    if board_state[square] == 0:
+                        available_moves.append(square)
+
+                next_move = random.choice(available_moves)
+                gameboard.move(next_move)
+
+    player_1_percentage = (player_1_wins / n) if player_1_wins != 0 else 0
+    player_2_percentage = (player_2_wins / n) if player_2_wins != 0 else 0
+    stalemate_percentage = (stalemates / n) if stalemates != 0 else 0
+
+    return n, player_1_percentage, player_2_percentage, stalemate_percentage
 
 
 if __name__ == "__main__":
