@@ -146,7 +146,7 @@ class TicTacToe():
         """_ Part 2: Implement This Method _
 
         Displays the board on the specified stream."""
-        print('\n')
+        stream.write('\n')
         i = 0
         j = self.n
         for x in range(self.n):
@@ -167,7 +167,7 @@ class TicTacToe():
                 stream.write('\n')
             i += self.n
             j += self.n
-        print('\n')
+        stream.write('\n')
 
     def is_win(self):
         """_ Part 3: Implement This Method _
