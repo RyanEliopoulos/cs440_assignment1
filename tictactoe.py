@@ -4,31 +4,53 @@ Ryan Paulos
 CS450 Assignment 1
 1/26/2021
 
-
+Tic Tac Toe Monte Carlo Simulations
 
 Answer the following questions using your implementation:
 
 1. Is it significantly better to play as 'X', or 'O', or neither?
 
+    Answer
+    It is significantly better to play as 'X'.  Running through many thousands of simulations reveal 'X' as the
+    winner about 58% of the time, 'O' about 28% of the time, and stalemates about 13% of the time.
+
 2. Describe an approach that will allow you to test if all first moves
    are equally good for 'X'. The method should be valid (yields
    correct results) and efficient (use minimal calculation).
+
+   Answer
+   Begin the Monte Carlo simulations with X having already made the first move.
+   Remember the resulting win rate. Repeat for each possible first move and compare outcomes.
 
 3. Using the method described in (2), are all first moves for 'X'
    equally good?  If so, what are the odds that 'X' will win?  If not
    which is the best move for 'X' and how much does it improve the
    odds 'X' will win over the second best move?
 
+   Answer
+   No, not all first moves for 'X' are equally good. After 900,000 simulations the best move for 'X' is the center,
+   netting a 69% win rate. This is an 8% improvement over the second best move, which is a 4-way tie between the corner
+   positions at 61%.
+
 3. If 'X' moves into the bottom middle square, what is O's best
    response? (i.e.  the response that is *least likely* to yield a win
    for X)?
 
+    Answer
+
+    The middle position is the best move that O can make in this situation, limiting 'X' to a 42% win rate in doing so
+    compared with the next best at the bottom-left and bottom-right positions for a 50% 'X' win rate.
+
 4. As the board gets bigger, is X's first move more, or less,
    strategically important?
 
+
+    Answer
+
+    The first move loses importance as the board grows since the likelihood of either player winning
+    drops considerably.
 """
 import sys
-import random
 
 
 def int_input(state, mover):
@@ -315,7 +337,6 @@ def mc(state, n, debug=False):
                 for square in range(len(board_state)):
                     if board_state[square] == 0:
                         available_moves.append(square)
-                random.shuffle(available_moves)
                 next_move = random.choice(available_moves)
                 gameboard.move(next_move)
 
