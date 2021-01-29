@@ -61,7 +61,7 @@ class TicTacToeTests(unittest.TestCase):
         self.assertEquals(t.is_win(), (ttt.TicTacToe.Row, 0, 1))
 
     def testCommandLine1(self):
-        cmd = 'python3 tictactoe.py --state 102022110 --mc 10000'
+        cmd = 'python tictactoe.py --state 102022110 --mc 10000'
         out = subprocess.check_output(cmd, shell=True)
         # get the last line...
         lastout = out.decode('ascii').splitlines()[-1]
@@ -76,7 +76,7 @@ class TicTacToeTests(unittest.TestCase):
         tolerance = .08
         expected = [.67, .33, 0.0]
 
-
+        print(wins)
         for w,e in zip(wins, expected):
             in_tolerance = (w <= (e + tolerance) and w >= (e - tolerance))
             self.assertTrue(in_tolerance,
