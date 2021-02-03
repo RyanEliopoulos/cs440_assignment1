@@ -312,7 +312,8 @@ def mc(state, n, debug=False):
     player_1_wins = 0
     player_2_wins = 0
     stalemates = 0
-    gameboard = TicTacToe(3)
+    n = t.n
+    gameboard = TicTacToe(n)
     translated_state = [x if x != 2 else -1 for x in state]
     gameboard.reset(translated_state)
 
